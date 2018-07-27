@@ -79,6 +79,7 @@ model = EncoderDecoderModel(encoder, decoder, loss_fun, acc_fun)
 # Optimizer
 optimizer = chainer.optimizers.Adam(params.lr / len(args.gpus))
 optimizer.setup(model)
+optimizer.add_hook(chainer.optimizer.GradientClipping(10))
 
 # Iterator
 if args.process * args.prefetch > 1:

@@ -8,7 +8,7 @@ import chainer
 
 class Preprocess(object):
     def __init__(self, sr, n_fft, hop_length, n_mels, top_db,
-                 length, categorical_output_dim):
+                 length):
         self.sr = sr
         self.n_fft = n_fft
         self.hop_length = hop_length
@@ -19,10 +19,7 @@ class Preprocess(object):
             self.length = None
         else:
             self.length = length + 1
-        if categorical_output_dim is False or categorical_output_dim is None:
-            self.output_dim = 1
-        else:
-            self.output_dim = categorical_output_dim
+        self.output_dim = 1
 
     def __call__(self, path):
         # load data(trim and normalize)
@@ -60,13 +57,7 @@ class Preprocess(object):
         raw = numpy.expand_dims(raw, -1)  # expand height
         spectrogram = numpy.expand_dims(spectrogram, 0)
 
-        if self.output_dim == 1:
-            return raw[:, :-1], spectrogram, raw[:, 1:]
-        else:
-            quantized_values = \
-                numpy.arange(self.output_dim) * 2 / self.output_dim - 1
-            digitized_values = numpy.digitize(raw, quantized_values)
-            return raw[:, :-1], spectrogram, digitized_values[:, 1:]
+        return raw[:, :-1], spectrogram
 
 
 def get_LJSpeech_paths(root):

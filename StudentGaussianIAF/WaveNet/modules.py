@@ -276,3 +276,28 @@ class WaveNet(chainer.Chain):
         self.proj2_queue3 = F.concat((self.proj2_queue3[:, :, 1:], x), axis=2)
         x = self.proj2(self.proj2_queue3)
         return x
+
+
+class ParallelWaveNet(chainer.ChainList):
+    def __init__(
+            self, n_loops, n_layers, filter_size, residual_channels,
+            dilated_channels, skip_channels, condition_dim, dropout_zero_rate):
+        super(ParallelWaveNet, self).__init__()
+        for n_loop, n_layer in zip(n_loops, n_layers):
+            self.add_link(WaveNet(
+                n_loop, n_layer, filter_size, residual_channels,
+                dilated_channels, skip_channels, 2, 2 ** 16, -7, condition_dim,
+                dropout_zero_rate))
+
+    def __call__(self, z, condition):
+        for i, flow in enumerate(self.children()):
+            x = flow(z, condition)
+            mean, log_std = F.split_axis(x, 2, axis=1)
+            z = z * F.exp(log_std) + mean
+            if i == 0:
+                out_mean = mean
+                out_log_std = log_std
+            else:
+                out_mean = mean + F.exp(log_std) * out_mean
+                out_log_std += log_std
+        return out_mean, out_log_std

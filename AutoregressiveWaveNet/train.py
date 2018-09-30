@@ -26,7 +26,7 @@ parser.add_argument('--gpus', '-g', type=int, default=[-1], nargs='+',
                     help='GPU IDs (negative value indicates CPU)')
 parser.add_argument('--process', '-p', type=int, default=1,
                     help='Number of parallel processes')
-parser.add_argument('--prefetch', '-f', type=int, default=1,
+parser.add_argument('--prefetch', '-f', type=int, default=64,
                     help='Number of prefetch samples')
 parser.add_argument('--resume', '-r', default='',
                     help='Resume the training from snapshot')

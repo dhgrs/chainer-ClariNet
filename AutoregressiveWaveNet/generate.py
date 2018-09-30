@@ -86,7 +86,6 @@ for i in range(len(output)):
         logit_probs = out[:, :nr_mix]
         means = out[:, nr_mix:2 * nr_mix]
         log_scales = out[:, 2 * nr_mix:3 * nr_mix]
-        print(log_scales)
         log_scales = decoder.xp.maximum(log_scales, params.log_scale_min)
 
         if params.distribution_type == 'gaussian':
@@ -105,7 +104,6 @@ for i in range(len(output)):
             rand = rand[0, axis, 0, 0]
 
         value = decoder.xp.squeeze(rand.astype(decoder.xp.float32))
-        value /= 127.5
         value = decoder.xp.clip(value, -1, 1)
         x.array[:] = value
     output[i] = value

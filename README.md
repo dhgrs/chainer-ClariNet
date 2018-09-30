@@ -26,7 +26,7 @@ You can download VCTK Corpus(en multi speaker)/LJ-Speech(en single speaker) very
 Almost parameters in `params.py` and `teacher_params.py` are same as `params.py` in my other repositories like [VQ-VAE](https://github.com/dhgrs/chainer-VQ-VAE). If you modified `params.py` in AutoregressiveWavenet, you have to replace `teacher_params.py` with it to train student.
 
 ## training
-You can use same command in each directories.
+You can use same command in each directory.
 ```
 (without GPU)
 python train.py

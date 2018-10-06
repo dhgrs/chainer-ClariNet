@@ -4,10 +4,10 @@ A Chainer implementation of ClariNet( https://arxiv.org/abs/1807.07281 ).
 
 # Results
 ## Autoregressive WaveNet(Single Gaussian ver.) trained with VCTK Corpus
-http://nana-music.com/sounds/04027269/
+https://nana-music.com/sounds/04027269/
 
 ## Student Gaussian IAF trained with LJ-Speech
-http://nana-music.com/sounds/0429c057/
+https://nana-music.com/sounds/043ba7b4/
 
 # Requirements
 I trained and generated with

@@ -13,7 +13,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--input', '-i', help='input file')
 parser.add_argument('--output', '-o', default='result.wav', help='output file')
 parser.add_argument('--model', '-m', help='snapshot of trained model')
-parser.add_argument('--threshold', '-t', default=30,
+parser.add_argument('--threshold', '-t', type=int, default=30,
                     help='threshold of generated silence part')
 parser.add_argument('--gpu', '-g', type=int, default=-1,
                     help='GPU ID (negative value indicates CPU)')

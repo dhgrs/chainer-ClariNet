@@ -13,6 +13,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--input', '-i', help='input file')
 parser.add_argument('--output', '-o', default='result.wav', help='output file')
 parser.add_argument('--model', '-m', help='snapshot of trained model')
+parser.add_argument('--threshold', '-t', type=int, default=30,
+                    help='threshold of generated silence part')
 parser.add_argument('--gpu', '-g', type=int, default=-1,
                     help='GPU ID (negative value indicates CPU)')
 args = parser.parse_args()
@@ -63,11 +65,16 @@ with chainer.using_config('enable_backprop', False):
     with chainer.using_config('train', params.apply_dropout):
         shape = (1, 1, condition.shape[2], 1)
         z = student.xp.random.normal(0, 1, shape).astype(student.xp.float32)
-        means, scales = student(z, condition)
-        distribution = chainer.distributions.Normal(means, log_scale=scales)
-        output = distribution.sample()
+        means, _ = student(z, condition)
+        output = means
         output = student.xp.squeeze(output.array)
 
 if use_gpu:
     output = chainer.cuda.to_cpu(output)
-librosa.output.write_wav(args.output, output, params.sr)
+
+postprocessed_output = numpy.zeros_like(output)
+intervals = librosa.effects.split(output, top_db=args.threshold)
+for interval in intervals:
+    postprocessed_output[interval[0]:interval[1]] = \
+        output[interval[0]:interval[1]]
+librosa.output.write_wav(args.output, postprocessed_output, params.sr)

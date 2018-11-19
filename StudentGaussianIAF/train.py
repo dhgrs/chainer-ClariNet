@@ -41,8 +41,7 @@ files, _ = get_LJSpeech_paths(params.root)
 # files, _ = get_VCTK_paths(params.root)
 
 preprocess = Preprocess(
-    params.sr, params.n_fft, params.hop_length, params.n_mels, params.top_db,
-    params.length)
+    params.sr, params.n_fft, params.hop_length, params.n_mels, params.length)
 
 dataset = chainer.datasets.TransformDataset(files, preprocess)
 train, valid = chainer.datasets.split_dataset_random(

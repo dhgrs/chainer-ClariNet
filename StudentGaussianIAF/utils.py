@@ -7,13 +7,11 @@ import chainer
 
 
 class Preprocess(object):
-    def __init__(self, sr, n_fft, hop_length, n_mels, top_db,
-                 length):
+    def __init__(self, sr, n_fft, hop_length, n_mels, length):
         self.sr = sr
         self.n_fft = n_fft
         self.hop_length = hop_length
         self.n_mels = n_mels
-        self.top_db = top_db
 
         if length is None:
             self.length = None
@@ -24,7 +22,6 @@ class Preprocess(object):
     def __call__(self, path):
         # load data(trim and normalize)
         raw, _ = librosa.load(path, self.sr)
-        raw, _ = librosa.effects.trim(raw, self.top_db)
         raw /= numpy.abs(raw).max()
         raw = raw.astype(numpy.float32)
 

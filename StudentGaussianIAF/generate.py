@@ -28,8 +28,7 @@ path = args.input
 # preprocess
 n = 1  # batchsize; now suporrts only 1
 inputs = Preprocess(
-    params.sr, params.n_fft, params.hop_length, params.n_mels, params.top_db,
-    None)(path)
+    params.sr, params.n_fft, params.hop_length, params.n_mels, None)(path)
 
 _, condition = inputs
 condition = numpy.expand_dims(condition, axis=0)
